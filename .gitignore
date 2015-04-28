@@ -1,6 +1,34 @@
-.gradle
-/local.properties
+<<<<<<< HEAD
+# Android Studio files
+*.iml
 /.idea/workspace.xml
 /.idea/libraries
+
+# OSX files
 .DS_Store
-/build
+
+# Built application files
+*.apk
+*.ap_
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+
+# Gradle files
+.gradle/
+build/
+/*/build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log Files
+*.log
+>>>>>>> b30b73c66f24c689acf891d83cfac933f45e1f4e
