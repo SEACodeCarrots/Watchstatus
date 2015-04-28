@@ -1,8 +1,8 @@
-<<<<<<< HEAD
 # Android Studio files
 *.iml
-/.idea/workspace.xml
-/.idea/libraries
+.idea/
+#/.idea/workspace.xml
+#/.idea/libraries
 
 # OSX files
 .DS_Store
@@ -31,4 +31,3 @@ local.properties
 
 # Log Files
 *.log
->>>>>>> b30b73c66f24c689acf891d83cfac933f45e1f4e
