@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WatchStatus.iml" filepath="$PROJECT_DIR$/WatchStatus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Watchstatus.iml" filepath="$PROJECT_DIR$/Watchstatus.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

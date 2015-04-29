@@ -1,9 +1,12 @@
 package org.codecarrots.watchstatus;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -35,5 +38,10 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateToNotification(View view) {
+        Intent intent = new Intent(this, Notification.class);
+        startActivity(intent);
     }
 }

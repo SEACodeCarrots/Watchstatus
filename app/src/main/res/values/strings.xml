@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">WatchStatus</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="buttonNotif">NOtification</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_notification">Notification</string>
 </resources>

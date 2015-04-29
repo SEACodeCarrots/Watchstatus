@@ -1,7 +1,12 @@
 package org.codecarrots.watchstatus;
 
 /**
- * Created by dipti on 4/27/15.
+ * This Interface is to be implemented by Stuatus classes.
+ * @author Dipti Nirmale
  */
-public class Notifier {
+interface Notifier {
+
+    boolean isNotifierSet();
+    void setNotifier();
+    void sendNotification();
 }
