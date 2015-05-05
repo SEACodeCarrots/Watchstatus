@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,20 +37,20 @@ public class NotificationActivity extends ActionBarActivity {
         int id = Integer.parseInt(intent.getStringExtra("ID"));
         Log.d(LOGTAG, "Preparing to send notification");
 
-        Notification statusUpdate = new Notification();
-        statusUpdate.icon = android.R.drawable.sym_def_app_icon;
-        statusUpdate.tickerText = context.getText(R.string.app_name);
-        statusUpdate.when = System.currentTimeMillis();
+        String notificationTitle = context.getText(R.string.app_name).toString();
 
-        Intent notificationIntent = new Intent(context, NotificationActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        NotificationCompat.Builder statusUpdate = new NotificationCompat.Builder(context)
+                .setContentTitle(notificationTitle)
+                .setContentText(message)
+                .setSmallIcon(android.R.drawable.sym_def_app_icon);
 
-        statusUpdate.setLatestEventInfo(context, context.getText(R.string.app_name).toString(), message, pendingIntent);
+//      Intent notificationIntent = new Intent(context, NotificationActivity.class);
+//      PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         Log.d(LOGTAG, "Sending notification with ID: " + id);
-        notificationManager.notify(id, statusUpdate);
+        notificationManager.notify(id, statusUpdate.build());
     }
 
 }

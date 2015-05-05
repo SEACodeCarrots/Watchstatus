@@ -47,7 +47,10 @@
 
         <activity
             android:name=".NotificationActivity"
-            android:label="@string/title_activity_notification" >
+            android:label="@string/title_activity_notification"
+            android:exported="true"
+            android:allowEmbedded="true"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="org.codecarrots.watchstatus.MainActivity.NotificationReceiver"/>
                 <category android:name="android.intent.category.DEFAULT"/>
