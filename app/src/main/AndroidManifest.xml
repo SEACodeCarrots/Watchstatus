@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.codecarrots.watchstatus" >
+    package="org.codecarrots.watchstatus"
+    android:versionCode="1" >
+
+    <uses-sdk
+        android:maxSdkVersion="22"
+        android:minSdkVersion="19" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
+
+    <android:uses-permission
+        android:name="android.permission.BROADCAST_STICKY"/>
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -16,9 +33,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".CellSignalStatusService"
+            android:exported="false" >
+        </service>
+
+        <receiver
+            android:name=".NotificationReceiver"
+            android:enabled="true"
+            android:exported="true" >
+        </receiver>
+
         <activity
-            android:name=".Notification"
+            android:name=".NotificationActivity"
             android:label="@string/title_activity_notification" >
+            <intent-filter>
+                <action android:name="org.codecarrots.watchstatus.MainActivity.NotificationReceiver"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
     </application>
 
