@@ -12,6 +12,9 @@
         android:maxSdkVersion="18"/>
 
     <android:uses-permission
+        android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <android:uses-permission
         android:name="android.permission.BROADCAST_STICKY"/>
 
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
