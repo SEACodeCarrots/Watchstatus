@@ -38,11 +38,14 @@ public class MainActivity extends Activity {
     }
 
     public void onToggleClicked_cellSignal(View view) {
-        if (((ToggleButton) view).isChecked()) {
+        boolean signalNotificationEnabled = ((ToggleButton) view).isChecked();
+        Intent cellSignalStatusService = new Intent(this, CellSignalStatusService.class);
+        if (signalNotificationEnabled) {
             Log.d(LOGTAG, "CellSignalToggle is ON");
-            startService(new Intent(this, CellSignalStatusService.class));
+            startService(cellSignalStatusService);
         }
         else {
+            stopService(cellSignalStatusService);
             Log.d(LOGTAG, "CellSignalToggle is OFF");
         }
     }

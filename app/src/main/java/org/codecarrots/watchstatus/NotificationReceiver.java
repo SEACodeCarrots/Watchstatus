@@ -8,17 +8,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+/**
+ * This class is Broadcast Receiver for notifications sent by Status Services.
+ * It forwards the received content to NotificationActivity for further actions.
+ *
+ * @author Dipti Nirmale
+ */
 public class NotificationReceiver extends BroadcastReceiver {
 
     private static final String LOGTAG = "NotificationReceiver";
-    public static final String ACTION = "org.codecarrots.watchstatus.MainActivity.NotificationReceiver";
+    public static final String ACTION = "org.codecarrots.watchstatus.NotificationReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(LOGTAG, "Broadcast received");
-        Intent activityIntent = new Intent(intent);
-        activityIntent.setClass(context, NotificationActivity.class);
-        activityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(activityIntent);
+        Intent serviceIntent = new Intent(intent);
+        serviceIntent.setClass(context, NotificationService.class);
+        serviceIntent.setAction("org.codecarrots.watchstatus.NotificationService");
+        context.startService(serviceIntent);
     }
 }

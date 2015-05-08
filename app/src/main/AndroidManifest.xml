@@ -9,14 +9,9 @@
 
     <android:uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
-
-    <android:uses-permission
-        android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <android:uses-permission
-        android:name="android.permission.BROADCAST_STICKY"/>
-
+        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <android:uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <android:uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
@@ -50,15 +45,25 @@
 
         <activity
             android:name=".NotificationActivity"
-            android:label="@string/title_activity_notification"
-            android:exported="true"
             android:allowEmbedded="true"
-            android:taskAffinity="">
+            android:exported="true"
+            android:label="@string/title_activity_notification"
+            android:taskAffinity="" >
             <intent-filter>
-                <action android:name="org.codecarrots.watchstatus.MainActivity.NotificationReceiver"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="org.codecarrots.watchstatus.MainActivity.NotificationReceiver" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CellSignalStatusHandler"
+            android:label="@string/title_activity_cell_signal_status_handler" >
+        </activity>
+
+        <service
+            android:name=".NotificationService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

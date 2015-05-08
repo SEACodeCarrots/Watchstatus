@@ -3,6 +3,7 @@ package org.codecarrots.watchstatus;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
+/**
+ * This activity sends notification to the user forwarded by NotificationReceiver.
+ *
+ * @author Dipti Nirmale
+ */
 public class NotificationActivity extends ActionBarActivity {
 
     private static final String LOGTAG = "NotificationActivity";
@@ -42,10 +47,16 @@ public class NotificationActivity extends ActionBarActivity {
         NotificationCompat.Builder statusUpdate = new NotificationCompat.Builder(context)
                 .setContentTitle(notificationTitle)
                 .setContentText(message)
+                .setAutoCancel(true)
                 .setSmallIcon(android.R.drawable.sym_def_app_icon);
 
-//      Intent notificationIntent = new Intent(context, NotificationActivity.class);
-//      PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        Intent notificationIntent = new Intent(context, CellSignalStatusHandler.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(CellSignalStatusHandler.class);
+        stackBuilder.addNextIntent(notificationIntent);
+
+        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        statusUpdate.setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 

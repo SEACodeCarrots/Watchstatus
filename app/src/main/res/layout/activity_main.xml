@@ -13,10 +13,11 @@
         android:layout_height="wrap_content" />
 
     <ToggleButton
-        android:text="Cellular Signal Strength"
+        android:textOn="Enabled"
+        android:textOff="Disabled"
         android:id="@+id/cellSignalToggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onToggleClicked_cellSignal"/>
+        android:onClick="onToggleClicked_cellSignal" />
 
 </LinearLayout>
