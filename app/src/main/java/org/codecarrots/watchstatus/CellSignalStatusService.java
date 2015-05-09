@@ -1,8 +1,14 @@
 package org.codecarrots.watchstatus;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This class is to keep track of cellular signal status.
@@ -19,10 +25,13 @@ public class CellSignalStatusService extends IntentService {
 
     private String mNotificationMessage;
     private Intent mIntent;
-    private CellSignalStatus signalStatus = CellSignalStatus.getInstance();
+    private CellSignalStatus mSignalStatus;
+    private Context mContext;
 
     public CellSignalStatusService() {
         super(LOGTAG);
+        mContext = this;
+        mSignalStatus = CellSignalStatus.getInstance();
     }
 
     @Override
@@ -34,9 +43,20 @@ public class CellSignalStatusService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        signalStatus.setSignalType(this);
-        mNotificationMessage = signalStatus.getSignalStatus(this);
-        broadcastSignalStatus();
+        scheduleStatusCheckForCellSignal();
+    }
+
+    private void scheduleStatusCheckForCellSignal() {
+        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        final Runnable statusChecker = new Runnable() {
+            @Override
+            public void run() {
+                mSignalStatus.setSignalType(mContext);
+                mNotificationMessage = mSignalStatus.getSignalStatus(mContext);
+                broadcastSignalStatus();
+            }
+        };
+        final ScheduledFuture<?> statusCheckerHandle = scheduler.scheduleAtFixedRate(statusChecker, 10, 30, TimeUnit.SECONDS);
     }
 
     private void broadcastSignalStatus() {

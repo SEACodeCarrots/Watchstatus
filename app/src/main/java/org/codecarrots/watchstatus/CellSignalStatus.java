@@ -11,24 +11,22 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 
 /**
- * This Singleton class maintains all the information related to cellular signal of the Android device.
+ * This Singleton class maintains the required information related to cellular signal of the Android device.
  *
  * @author Dipti Nirmale
  */
 public class CellSignalStatus {
-    private static CellSignalStatus instance = new CellSignalStatus();
     private static final String LOGTAG = "CellSignalStatus";
+    private static CellSignalStatus instance = new CellSignalStatus();
 
-    private enum SIGNALS_TYPES {GSM, WCDMA, CDMA, LTE}
-    private static SIGNALS_TYPES signalType;
-    private static CellSignalStrength css;
-
+    private CellSignalStatus() { }
     public static CellSignalStatus getInstance() {
         return instance;
     }
 
-    private CellSignalStatus() {
-    }
+    private enum SIGNALS_TYPES {GSM, WCDMA, CDMA, LTE}
+    private SIGNALS_TYPES mSignalType;
+    private CellSignalStrength mCss;
 
     private int mDbmSignal;
     private int mAsuSignal;
@@ -46,31 +44,31 @@ public class CellSignalStatus {
             case "CellInfoWcdma":
                 Log.d(LOGTAG, "Signal is Wcdma");
 
-                signalType = SIGNALS_TYPES.WCDMA;
-                css = ((CellInfoWcdma) cInfo).getCellSignalStrength();
+                mSignalType = SIGNALS_TYPES.WCDMA;
+                mCss = ((CellInfoWcdma) cInfo).getCellSignalStrength();
                 break;
             case "CellInfoGsm":
                 Log.d(LOGTAG, "Signal is GSM");
 
-                signalType = SIGNALS_TYPES.GSM;
-                css = ((CellInfoGsm) cInfo).getCellSignalStrength();
+                mSignalType = SIGNALS_TYPES.GSM;
+                mCss = ((CellInfoGsm) cInfo).getCellSignalStrength();
                 break;
             case "CellInfoCdma":
                 Log.d(LOGTAG, "Signal is Cdma");
 
-                signalType = SIGNALS_TYPES.CDMA;
-                css = ((CellInfoCdma) cInfo).getCellSignalStrength();
+                mSignalType = SIGNALS_TYPES.CDMA;
+                mCss = ((CellInfoCdma) cInfo).getCellSignalStrength();
                 break;
             case "CellInfoLte":
                 Log.d(LOGTAG, "Signal is Lte");
 
-                signalType = SIGNALS_TYPES.LTE;
-                css = ((CellInfoLte) cInfo).getCellSignalStrength();
+                mSignalType = SIGNALS_TYPES.LTE;
+                mCss = ((CellInfoLte) cInfo).getCellSignalStrength();
                 break;
             default:
                 Log.d(LOGTAG, "Signal not detected");
 
-                signalType = null;
+                mSignalType = null;
                 break;
         }
     }
@@ -81,6 +79,8 @@ public class CellSignalStatus {
      */
     public String getSignalStatus(Context context) {
         String statusMessage = watchSignalStatus(context);
+        Log.d(LOGTAG, "mCss= " + mCss.getClass().getSimpleName() + ", dbm= " + mCss.getDbm() + ", mDbm= " + mDbmSignal);
+
         if (statusMessage != null)
             return statusMessage;
 
@@ -96,14 +96,14 @@ public class CellSignalStatus {
     }
 
     private void setSignalStrengthValues() {
-        if (css == null)
+        if (mCss == null)
             return;
-        mAsuSignal = css.getAsuLevel();
-        mDbmSignal = css.getDbm();
+        mAsuSignal = mCss.getAsuLevel();
+        mDbmSignal = mCss.getDbm();
     }
 
     private String getStringForSignalStrength() {
-        if (signalType == null)
+        if (mSignalType == null)
             return null;
 
         String signalString = "ASU Level : " + mAsuSignal + "\t DBM Level := " + mDbmSignal + "\n Percentage : " + mPercentSignal;
