@@ -18,17 +18,23 @@ import android.widget.ToggleButton;
 public class MainActivity extends Activity {
 
     private static final String LOGTAG = "MainActivity";
+    private static final String SIGNALTOGGLESTATE = "signal_toggle_button_state";
+
+    private static Bundle bundle = new Bundle();
+
     private TextView mTextView;
     private IntentFilter mIntentFilter;
     private NotificationReceiver mNotificationReceiver;
+    private ToggleButton signalToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         mTextView = (TextView) findViewById(R.id.cellSignalText);
-        ToggleButton toggleButton = (ToggleButton) findViewById(R.id.cellSignalToggle);
+        signalToggle = (ToggleButton) findViewById(R.id.cellSignalToggle);
+
+        setContentView(R.layout.activity_main);
 
         mNotificationReceiver = new NotificationReceiver();
         mIntentFilter = new IntentFilter(NotificationReceiver.ACTION);
@@ -38,9 +44,8 @@ public class MainActivity extends Activity {
     }
 
     public void onToggleClicked_cellSignal(View view) {
-        boolean signalNotificationEnabled = ((ToggleButton) view).isChecked();
-        Intent cellSignalStatusService = new Intent(this, CellSignalStatusService.class);
-        if (signalNotificationEnabled) {
+        Intent cellSignalStatusService = new Intent(this, SignalStatusService.class);
+        if (((ToggleButton) view).isChecked()) {
             Log.d(LOGTAG, "CellSignalToggle is ON");
             startService(cellSignalStatusService);
         }
@@ -51,14 +56,22 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        signalToggle = (ToggleButton) findViewById(R.id.cellSignalToggle);
+        signalToggle.setChecked(bundle.getBoolean(SIGNALTOGGLESTATE, false));
         registerReceiver(mNotificationReceiver, mIntentFilter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        bundle.putBoolean(SIGNALTOGGLESTATE, signalToggle.isChecked());
         unregisterReceiver(mNotificationReceiver);
     }
 
