@@ -6,13 +6,17 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
-
 public class NotificationService extends IntentService {
 
     private static final String LOGTAG = "NotificationService";
+    private static final String PREFERENCE_FILE = "org_codecarrots_watchstatus_preferences";
+    private static final String RINGTONE = "ringtone";
+    private static final String VIBRATE_MODE = "vibrate_mode";
+    private static final String NOTIFICATION_ENABLED = "notification_enabled";
 
     public NotificationService() {
         super("NotificationService");
@@ -20,6 +24,15 @@ public class NotificationService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.v(LOGTAG, "Preferences: ");
+        SharedPreferences prefs = getSharedPreferences(PREFERENCE_FILE, MODE_PRIVATE);
+        Boolean isNotificationEnabled = prefs.getBoolean(NOTIFICATION_ENABLED, true);
+        Log.v(LOGTAG, isNotificationEnabled.toString());
+        Boolean isVibrateModeOn = prefs.getBoolean(VIBRATE_MODE, true);
+        Log.v(LOGTAG, isVibrateModeOn.toString());
+        String ringtone = prefs.getString(RINGTONE, android.provider.Settings.System.DEFAULT_RINGTONE_URI.toString());
+        Log.v(LOGTAG, ringtone);
+
         sendNotification(intent);
     }
 

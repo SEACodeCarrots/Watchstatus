@@ -1,27 +1,24 @@
 package org.codecarrots.watchstatus;
 
-import android.app.IntentService;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.IBinder;
 import android.util.Log;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-/**
- * This class is to keep track of cellular signal status.
- * This service runs in background and sends notification when required.
- *
- * @author Dipti Nirmale
- */
-public class CellSignalStatusService extends IntentService {
-
-    private static final String LOGTAG = "CellSignalStatusService";
+public class CellSignalStatusService extends Service {
+    private static final String LOGTAG = "SignalStatusService";
     private static final String NOTIFICATION = "NOTIFICATION";
     private static final String ID = "ID";
     private static final String IDVALUE = "101";
+
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     private String mNotificationMessage;
     private Intent mIntent;
@@ -29,34 +26,66 @@ public class CellSignalStatusService extends IntentService {
     private Context mContext;
 
     public CellSignalStatusService() {
-        super(LOGTAG);
         mContext = this;
         mSignalStatus = CellSignalStatus.getInstance();
     }
 
     @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
     public void onCreate() {
-        Log.d(LOGTAG, "Creating new service for CellSignalStatus");
+        Log.i(LOGTAG, "Creating new service for CellSignalStatus");
         super.onCreate();
         mIntent = new Intent(LOGTAG);
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+//        super.onStartCommand(intent, flags, startId);
         scheduleStatusCheckForCellSignal();
+        return START_NOT_STICKY;
     }
 
     private void scheduleStatusCheckForCellSignal() {
-        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         final Runnable statusChecker = new Runnable() {
             @Override
             public void run() {
-                mSignalStatus.setSignalType(mContext);
-                mNotificationMessage = mSignalStatus.getSignalStatus(mContext);
-                broadcastSignalStatus();
+                try {
+                    mSignalStatus.setSignalType(mContext);
+                    mNotificationMessage = mSignalStatus.getSignalStatus(mContext);
+                    broadcastSignalStatus();
+                }
+                catch (Exception e) {
+                    Log.e(LOGTAG, "Exception occurred in Scheduler" + e.getMessage());
+                    Log.e(LOGTAG, e.getCause().getMessage() + e.getStackTrace());
+                }
             }
         };
+/*
+//        Lambda expressions: Need source 8 or higher
+
+        final Runnable statusChecker = () -> {
+                try {
+                    mSignalStatus.setSignalType(mContext);
+                    mNotificationMessage = mSignalStatus.getSignalStatus(mContext);
+                    broadcastSignalStatus();
+                }
+                catch (Throwable t) {
+                    Log.e(LOGTAG, "Exception occurred in Scheduler" + t.getMessage());
+                    Log.e(LOGTAG, "Stack trace " + t.getStackTrace());
+                }
+        };
+*/
         final ScheduledFuture<?> statusCheckerHandle = scheduler.scheduleAtFixedRate(statusChecker, 10, 30, TimeUnit.SECONDS);
+/*        try {
+            statusCheckerHandle.get();
+        }
+        catch (Exception e) {
+            Log.e(LOGTAG, "Stacktrace " + e.getStackTrace());
+        }*/
     }
 
     private void broadcastSignalStatus() {
@@ -68,4 +97,9 @@ public class CellSignalStatusService extends IntentService {
         Log.d(LOGTAG, "Broadcast sent");
     }
 
+    @Override
+    public void onDestroy() {
+        Log.i(LOGTAG, "Stopping the service for cell signal status");
+        scheduler.shutdown();
+    }
 }

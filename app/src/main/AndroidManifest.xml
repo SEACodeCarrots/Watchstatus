@@ -4,18 +4,20 @@
     android:versionCode="1" >
 
     <uses-sdk
-        android:maxSdkVersion="22"
+        android:maxSdkVersion="21"
         android:minSdkVersion="19" />
 
-    <android:uses-permission
+    <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <android:uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
+        android:maxSdkVersion="21" />
+    <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
+        android:maxSdkVersion="21" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -32,29 +34,12 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".CellSignalStatusService"
-            android:exported="false" >
-        </service>
-
         <receiver
             android:name=".NotificationReceiver"
             android:enabled="true"
             android:exported="true" >
         </receiver>
 
-        <activity
-            android:name=".NotificationActivity"
-            android:allowEmbedded="true"
-            android:exported="true"
-            android:label="@string/title_activity_notification"
-            android:taskAffinity="" >
-            <intent-filter>
-                <action android:name="org.codecarrots.watchstatus.MainActivity.NotificationReceiver" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".CellSignalStatusHandler"
             android:label="@string/title_activity_cell_signal_status_handler" >
@@ -64,6 +49,24 @@
             android:name=".NotificationService"
             android:exported="false" >
         </service>
+        <service
+            android:name=".CellSignalStatusService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.codecarrots.watchstatus.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
