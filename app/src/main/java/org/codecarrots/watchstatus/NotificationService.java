@@ -7,17 +7,18 @@ import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.Settings;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+
+/**
+ * Service for sending notifications to the user.
+ * @author Dipti Nirmale
+ */
 public class NotificationService extends IntentService {
 
     private static final String LOGTAG = "NotificationService";
-    private static final String PREFERENCE_FILE = "org_codecarrots_watchstatus_preferences";
-    private static final String RINGTONE = "ringtone";
-    private static final String VIBRATE_MODE = "vibrate_mode";
-    private static final String NOTIFICATION_ENABLED = "notification_enabled";
-
     public NotificationService() {
         super("NotificationService");
     }
@@ -25,18 +26,25 @@ public class NotificationService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.v(LOGTAG, "Preferences: ");
-        SharedPreferences prefs = getSharedPreferences(PREFERENCE_FILE, MODE_PRIVATE);
-        Boolean isNotificationEnabled = prefs.getBoolean(NOTIFICATION_ENABLED, true);
-        Log.v(LOGTAG, isNotificationEnabled.toString());
-        Boolean isVibrateModeOn = prefs.getBoolean(VIBRATE_MODE, true);
-        Log.v(LOGTAG, isVibrateModeOn.toString());
-        String ringtone = prefs.getString(RINGTONE, android.provider.Settings.System.DEFAULT_RINGTONE_URI.toString());
-        Log.v(LOGTAG, ringtone);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        sendNotification(intent);
+        Boolean isNotificationEnabled = sharedPreferences.getBoolean(getString(R.string.pref_key_new_alert_notifications), true);
+        Log.v(LOGTAG, "Notification: " + isNotificationEnabled.toString());
+        Boolean isVibrateModeOn = sharedPreferences.getBoolean(getString(R.string.pref_key_vibrate), true);
+        Log.v(LOGTAG, "Vibrate_mode: " + isVibrateModeOn.toString());
+        String ringtone = sharedPreferences.getString(getString(R.string.pref_key_ringtone), android.provider.Settings.System.DEFAULT_RINGTONE_URI.toString());
+        Log.v(LOGTAG, "Ringtone: " + ringtone);
+
+        if (isNotificationEnabled) {
+            Log.d(LOGTAG, "Sending notification");
+            sendNotification(intent, isVibrateModeOn, ringtone);
+        }
+        else {
+            Log.d(LOGTAG, "Select 'New Alert Notifications' to enable notifications");
+        }
     }
 
-    private void sendNotification(Intent intent) {
+    private void sendNotification(Intent intent, Boolean isVibrateModeOn, String ringtone) {
         try {
             Context context = getApplicationContext();
             String message = intent.getStringExtra("NOTIFICATION");
@@ -54,7 +62,13 @@ public class NotificationService extends IntentService {
                     .setCategory(NotificationCompat.CATEGORY_STATUS)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
-                    .setSmallIcon(android.R.drawable.sym_def_app_icon);
+                    .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                    .setSound(Uri.parse(ringtone));
+
+            if(isVibrateModeOn) {
+                long[] pattern = {0, 1000, 100, 50};
+                statusUpdate.setVibrate(pattern);
+            }
 
             Intent notificationIntent = new Intent(context, CellSignalStatusHandler.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);

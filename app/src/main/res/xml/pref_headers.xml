@@ -4,7 +4,7 @@
 
     <header
         android:fragment="org.codecarrots.watchstatus.SettingsActivity$NotificationPreferenceFragment"
-        android:title="@string/pref_header_notifications" />
-
+        android:title="@string/pref_header_notifications">
+    </header>
 
 </preference-headers>
