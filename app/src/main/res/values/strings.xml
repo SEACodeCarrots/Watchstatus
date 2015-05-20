@@ -4,6 +4,11 @@
     <string name="task_affinity_string">WatchStatusTasks</string>
     <string name="action_settings">Settings</string>
     <string name="main">Main</string>
+
+    <string name="cell_signal_text_title">Cellular Signal Status</string>
+    <string name="battery_text_title">Battery Status</string>
+    <string name="memory_text_title">Memory Status</string>
+
     <string name="title_activity_cell_signal_status_handler">CellSignalStatusHandler</string>
 
     <string name="title_activity_settings">Settings</string>

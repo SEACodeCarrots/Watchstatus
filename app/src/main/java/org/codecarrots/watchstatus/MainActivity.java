@@ -1,10 +1,8 @@
 package org.codecarrots.watchstatus;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +20,7 @@ import android.widget.ToggleButton;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOGTAG = "MainActivity";
-    private static final String SIGNALTOGGLESTATE = "signal_toggle_button_state";
+    private static final String SIGNAL_TOGGLE_BUTTON_STATE = "signal_toggle_button_state";
 
     private static Bundle bundle = new Bundle();
 
@@ -35,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mTextView = (TextView) findViewById(R.id.cellSignalText);
-        signalToggle = (ToggleButton) findViewById(R.id.cellSignalToggle);
+        mTextView = (TextView) findViewById(R.id.cell_signal_text);
+        signalToggle = (ToggleButton) findViewById(R.id.cell_signal_toggle);
 
         setContentView(R.layout.activity_main);
 
@@ -90,15 +88,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        signalToggle = (ToggleButton) findViewById(R.id.cellSignalToggle);
-        signalToggle.setChecked(bundle.getBoolean(SIGNALTOGGLESTATE, false));
+        signalToggle = (ToggleButton) findViewById(R.id.cell_signal_toggle);
+        signalToggle.setChecked(bundle.getBoolean(SIGNAL_TOGGLE_BUTTON_STATE, false));
         registerReceiver(mNotificationReceiver, mIntentFilter);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        bundle.putBoolean(SIGNALTOGGLESTATE, signalToggle.isChecked());
+        bundle.putBoolean(SIGNAL_TOGGLE_BUTTON_STATE, signalToggle.isChecked());
         unregisterReceiver(mNotificationReceiver);
     }
 
