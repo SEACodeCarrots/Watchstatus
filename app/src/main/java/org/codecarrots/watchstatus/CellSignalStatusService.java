@@ -16,7 +16,6 @@ public class CellSignalStatusService extends Service {
     private static final String LOGTAG = "SignalStatusService";
     private static final String NOTIFICATION = "NOTIFICATION";
     private static final String ID = "ID";
-    private static final String IDVALUE = "101";
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -90,7 +89,7 @@ public class CellSignalStatusService extends Service {
 
     private void broadcastSignalStatus() {
         mIntent.putExtra(NOTIFICATION, mNotificationMessage);
-        mIntent.putExtra(ID, IDVALUE);
+        mIntent.putExtra(ID, getString(R.string.notification_id_cell_signal));
         mIntent.setClass(this, NotificationReceiver.class);
         Log.d(LOGTAG, "Broadcasting Cellular Signal Status");
         sendBroadcast(mIntent);
