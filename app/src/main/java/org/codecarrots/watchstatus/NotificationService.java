@@ -19,6 +19,8 @@ import android.util.Log;
 public class NotificationService extends IntentService {
 
     private static final String LOGTAG = "NotificationService";
+    private static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+
     public NotificationService() {
         super("NotificationService");
     }
@@ -70,10 +72,12 @@ public class NotificationService extends IntentService {
                 statusUpdate.setVibrate(pattern);
             }
 
-            Intent notificationIntent = new Intent(context, CellSignalStatusHandler.class);
+            Intent notificationIntent = new Intent(context, NotificationHandlerActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-            stackBuilder.addParentStack(CellSignalStatusHandler.class);
+            stackBuilder.addParentStack(NotificationHandlerActivity.class);
             stackBuilder.addNextIntent(notificationIntent);
+
+            notificationIntent.putExtra(NOTIFICATION_ID, id);
 
             PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             statusUpdate.setContentIntent(pendingIntent);

@@ -40,11 +40,6 @@
             android:exported="true" >
         </receiver>
 
-        <activity
-            android:name=".CellSignalStatusHandler"
-            android:label="@string/title_activity_cell_signal_status_handler" >
-        </activity>
-
         <service
             android:name=".NotificationService"
             android:exported="false" >
@@ -62,6 +57,14 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.codecarrots.watchstatus.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NotificationHandlerActivity"
+            android:label="@string/title_activity_notification_handler" >
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
