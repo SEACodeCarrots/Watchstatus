@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOGTAG = "MainActivity";
     private static final String SIGNAL_TOGGLE_BUTTON_STATE = "signal_toggle_button_state";
+    private static final String BATTERY_TOGGLE_BUTTON_STATE = "battery_toggle_button_state";
 
     private static Bundle bundle = new Bundle();
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private IntentFilter mIntentFilter;
     private NotificationReceiver mNotificationReceiver;
     private ToggleButton signalToggle;
+    private ToggleButton batteryToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTextView = (TextView) findViewById(R.id.cell_signal_text);
         signalToggle = (ToggleButton) findViewById(R.id.cell_signal_toggle);
+        batteryToggle = (ToggleButton) findViewById(R.id.battery_toggle);
 
         setContentView(R.layout.activity_main);
 
@@ -80,6 +83,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void onToggleClicked_battery(View view) {
+        Intent batteryStatusService = new Intent(this, BatteryStatusService.class);
+        if (((ToggleButton) view).isChecked()) {
+            Log.d(LOGTAG, "BatteryToggle is ON");
+            startService(batteryStatusService);
+        }
+        else {
+            Log.d(LOGTAG, "BatteryToggle is OFF");
+            stopService(batteryStatusService);
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
@@ -90,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         signalToggle = (ToggleButton) findViewById(R.id.cell_signal_toggle);
         signalToggle.setChecked(bundle.getBoolean(SIGNAL_TOGGLE_BUTTON_STATE, false));
+
+        batteryToggle = (ToggleButton) findViewById((R.id.battery_toggle));
+        batteryToggle.setChecked(bundle.getBoolean(BATTERY_TOGGLE_BUTTON_STATE, false));
         registerReceiver(mNotificationReceiver, mIntentFilter);
     }
 
@@ -97,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         bundle.putBoolean(SIGNAL_TOGGLE_BUTTON_STATE, signalToggle.isChecked());
+        bundle.putBoolean(BATTERY_TOGGLE_BUTTON_STATE, batteryToggle.isChecked());
         unregisterReceiver(mNotificationReceiver);
     }
 

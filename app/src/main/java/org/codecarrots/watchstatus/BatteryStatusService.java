@@ -12,12 +12,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * The service to schedule watchstatus for cellular signals.
+ * The service to schedule watchstatus for battery.
  * The service is to be started/stopped from launcher activity.
  * @author Dipti Nirmale
  */
-public class CellSignalStatusService extends Service {
-    private static final String LOGTAG = "SignalStatusService";
+public class BatteryStatusService extends Service {
+    private static final String LOGTAG = "BatteryStatusService";
     private static final String NOTIFICATION = "NOTIFICATION";
     private static final String ID = "ID";
 
@@ -25,12 +25,12 @@ public class CellSignalStatusService extends Service {
 
     private String mNotificationMessage;
     private Intent mIntent;
-    private CellSignalStatus mSignalStatus;
+    private BatteryStatus mBatteryStatus;
     private Context mContext;
 
-    public CellSignalStatusService() {
+    public BatteryStatusService() {
         mContext = this;
-        mSignalStatus = CellSignalStatus.getInstance();
+        mBatteryStatus = BatteryStatus.getInstance();
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CellSignalStatusService extends Service {
 
     @Override
     public void onCreate() {
-        Log.i(LOGTAG, "Creating new service for CellSignalStatus");
+        Log.i(LOGTAG, "Creating new service for BatteryStatus");
         super.onCreate();
         mIntent = new Intent(LOGTAG);
     }
@@ -57,8 +57,7 @@ public class CellSignalStatusService extends Service {
             @Override
             public void run() {
                 try {
-                    mSignalStatus.setSignalType(mContext);
-                    mNotificationMessage = mSignalStatus.getSignalStatus(mContext);
+                    mNotificationMessage = mBatteryStatus.getBatteryStatus(mContext);
                     broadcastSignalStatus();
                 }
                 catch (Exception e) {
@@ -67,42 +66,22 @@ public class CellSignalStatusService extends Service {
                 }
             }
         };
-/*
-//        Lambda expressions: Need source 8 or higher
 
-        final Runnable statusChecker = () -> {
-                try {
-                    mSignalStatus.setSignalType(mContext);
-                    mNotificationMessage = mSignalStatus.getSignalStatus(mContext);
-                    broadcastSignalStatus();
-                }
-                catch (Throwable t) {
-                    Log.e(LOGTAG, "Exception occurred in Scheduler" + t.getMessage());
-                    Log.e(LOGTAG, "Stack trace " + t.getStackTrace());
-                }
-        };
-*/
-        final ScheduledFuture<?> statusCheckerHandle = scheduler.scheduleAtFixedRate(statusChecker, 10, 30, TimeUnit.SECONDS);
-/*        try {
-            statusCheckerHandle.get();
-        }
-        catch (Exception e) {
-            Log.e(LOGTAG, "Stacktrace " + e.getStackTrace());
-        }*/
+        final ScheduledFuture<?> statusCheckerHandle = scheduler.scheduleAtFixedRate(statusChecker, 30, 120, TimeUnit.SECONDS);
     }
 
     private void broadcastSignalStatus() {
         mIntent.putExtra(NOTIFICATION, mNotificationMessage);
-        mIntent.putExtra(ID, getString(R.string.notification_id_cell_signal));
+        mIntent.putExtra(ID, getString(R.string.notification_id_battery));
         mIntent.setClass(this, NotificationReceiver.class);
-        Log.d(LOGTAG, "Broadcasting Cellular Signal Status");
+        Log.d(LOGTAG, "Broadcasting Battery Status");
         sendBroadcast(mIntent);
         Log.d(LOGTAG, "Broadcast sent");
     }
 
     @Override
     public void onDestroy() {
-        Log.i(LOGTAG, "Stopping the service for cell signal status");
+        Log.i(LOGTAG, "Stopping the service for BatteryStatus");
         scheduler.shutdown();
     }
 }

@@ -70,6 +70,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.codecarrots.watchstatus.MainActivity" />
         </activity>
+
+        <service
+            android:name=".BatteryStatusService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

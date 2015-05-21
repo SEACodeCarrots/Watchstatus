@@ -58,7 +58,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="italic"
-            android:layout_marginLeft="15dp" />
+            android:layout_marginLeft="15dp"
+            android:onClick="onToggleClicked_battery"/>
 
     </LinearLayout>
 
