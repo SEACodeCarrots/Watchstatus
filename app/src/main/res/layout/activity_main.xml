@@ -2,27 +2,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_gravity="center">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="25dp">
 
         <TextView
             android:text="@string/cell_signal_text_title"
             android:id="@+id/cell_signal_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="italic"
+            android:gravity="left"/>
 
         <ToggleButton
             android:textOn="Enabled"
             android:textOff="Disabled"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="italic"
             android:id="@+id/cell_signal_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_marginLeft="15dp"
             android:onClick="onToggleClicked_cellSignal" />
 
     </LinearLayout>
@@ -30,13 +37,18 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="25dp">
 
         <TextView
             android:text="@string/battery_text_title"
             android:id="@+id/battery_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:gravity="left"
+            android:textStyle="italic"/>
 
         <ToggleButton
             android:textOn="Enabled"
@@ -44,27 +56,38 @@
             android:id="@+id/battery_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onToggleClicked_battery" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="italic"
+            android:layout_marginLeft="15dp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="25dp">
+
         <TextView
             android:text="@string/memory_text_title"
             android:id="@+id/memory_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textStyle="italic"
+            android:gravity="left"
+            />
 
         <ToggleButton
             android:textOn="Enabled"
             android:textOff="Disabled"
+            android:textStyle="italic"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/memory_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onToggleClicked_memory" />
+            android:layout_marginLeft="15dp"/>
 
     </LinearLayout>
 
