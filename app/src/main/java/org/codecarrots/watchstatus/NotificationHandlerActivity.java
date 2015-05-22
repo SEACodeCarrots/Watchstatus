@@ -112,6 +112,10 @@ public class NotificationHandlerActivity extends AppCompatActivity {
             mMessage = "\tYou are losing cellular signal. You might like to call or send SMS before that. " +
                     "\n\n\tHow about starting Buzzer? Buzzer will help you finding your phone during emergency.";
         }
+        else if (mId == Integer.parseInt(getString(R.string.notification_id_battery))) {
+            mMessage = "\tYour battery level is going down. Charging battery now would help you to prevent from switch off. " +
+                    "\n\n\tTurning ON Battery saver mode will be a good idea.";
+        }
         else {
             mMessage = "Oops! Something went wrong. Please Restart the app";
         }
