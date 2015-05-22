@@ -107,6 +107,8 @@ public class CellSignalStatus {
             return null;
 
         String signalString = "ASU Level : " + mAsuSignal + "\t DBM Level := " + mDbmSignal + "\n Percentage : " + mPercentSignal;
+        Log.d(LOGTAG, signalString);
+        signalString = "Cellular Signal level is " + mPercentSignal + " Percent";
         return signalString;
     }
 

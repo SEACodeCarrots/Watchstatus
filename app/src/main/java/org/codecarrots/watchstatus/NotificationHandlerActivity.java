@@ -25,7 +25,8 @@ public class NotificationHandlerActivity extends AppCompatActivity {
 
     private int mId;
     private String mMessage;
-    private Button mStartActionButton;
+    private Button mStartActionButton1;
+    private Button mStartActionButton2;
     private Button mCloseButton;
     private AlertDialog mAlertDialog;
 
@@ -43,7 +44,8 @@ public class NotificationHandlerActivity extends AppCompatActivity {
         TextView messageView = (TextView) findViewById(R.id.message_view);
         messageView.setText(mMessage);
 
-        mStartActionButton = (Button) findViewById(R.id.action_button);
+        mStartActionButton1 = (Button) findViewById(R.id.action_button);
+        mStartActionButton2 = (Button) findViewById(R.id.action_button_2);
         mCloseButton = (Button) findViewById(R.id.close_button);
         setButtonsStates();
     }
@@ -51,24 +53,28 @@ public class NotificationHandlerActivity extends AppCompatActivity {
     private void setButtonsStates() {
         if (mId == Integer.parseInt(getString(R.string.notification_id_cell_signal))) {
             mCloseButton.setText("No, Thanks");
-            mStartActionButton.setVisibility(View.VISIBLE);
-            mStartActionButton.setText("Start Buzzer");
+            mStartActionButton1.setVisibility(View.VISIBLE);
+            mStartActionButton1.setText("Start Buzzer");
             String[] options = {"10 minutes", "20 minutes", "30 minutes", "1 hour"};
             createAlertDialog(options);
-            mStartActionButton.setOnClickListener(new View.OnClickListener() {
+            mStartActionButton1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mAlertDialog.show();
                 }
             });
+            mStartActionButton2.setVisibility(View.VISIBLE);
+            mStartActionButton2.setText("Start Airplane mode");
         }
         else if (mId == Integer.parseInt(getString(R.string.notification_id_battery))) {
+            mStartActionButton2.setVisibility(View.GONE);
             mCloseButton.setText("No, Thanks");
-            mStartActionButton.setVisibility(View.VISIBLE);
-            mStartActionButton.setText("Start Battery Saver mode");
+            mStartActionButton1.setVisibility(View.VISIBLE);
+            mStartActionButton1.setText("Start Battery Saver mode");
         }
         else {
-            mStartActionButton.setVisibility(View.GONE);
+            mStartActionButton1.setVisibility(View.GONE);
+            mStartActionButton2.setVisibility(View.GONE);
             mCloseButton.setText("Close");
         }
         mCloseButton.setOnClickListener(new View.OnClickListener() {
